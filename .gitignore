@@ -62,3 +62,10 @@ lib/generated_plugin_registrant.dart
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
+# 파이어베이스 설정으로, 다음내용들은 들어가선 안된다.
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+macos/firebase_app_id_file.json

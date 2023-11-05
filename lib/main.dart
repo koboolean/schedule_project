@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:schedule_project/screens/homePage.dart';
 import 'package:schedule_project/screens/loginPage.dart';
@@ -11,6 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
   await Firebase.initializeApp(); // firebase 앱 시작
   await Future.delayed(const Duration(seconds: 3)); // 3초 지연
+  await initializeDateFormatting(); //달력의 언어 설정을 위해 추가
+
   runApp(
     MultiProvider(
       providers: [

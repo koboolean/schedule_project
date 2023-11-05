@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:schedule_project/screens/calendarPage.dart';
 import 'package:schedule_project/screens/myPage.dart';
 
 import '../constants/color.dart';
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _childrenWidget = [
-    MyPage(), // 캘린더
+    CalendarPage(), // 캘린더
     MyPage(), // 일기장
     MyPage(), // D-Day
     MyPage() // 마이페이지
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),
                 activeIcon: Icon(Icons.account_circle, color: THEME_COLOR),
-                label: 'MY페이지'),
+                label: '설정'),
           ],
         ),
       ),

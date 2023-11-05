@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:schedule_project/widgets/passwordDialog.dart';
 import 'package:yaml/yaml.dart';
 
 import '../services/authService.dart';
 import '../widgets/showConfirmationDialog.dart';
 import 'loginPage.dart';
 
-/// 홈페이지
+/// 마이페이지
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
 
@@ -20,6 +21,9 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    var password = "";
+
     final authService = context.read<AuthService>();
     final user = authService.currentUser()!;
     final ValueNotifier<String> version =
@@ -65,7 +69,6 @@ class _MyPageState extends State<MyPage> {
                         )),
                   ),
                   SizedBox(height: 15),
-                  Text('${user.displayName}'),
                   Text(
                     '${user.email}',
                     style: TextStyle(
@@ -103,7 +106,7 @@ class _MyPageState extends State<MyPage> {
                 height: 23,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 30.0),
+                padding: const EdgeInsets.only(left: 18.0, right: 30.0, bottom: 10),
                 child: Row(
                   children: [
                     Text(
@@ -131,6 +134,21 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ],
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                child: Row(children: [
+                  Text("암호설정 여부", style : TextStyle(fontSize: 16)),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.check_box_outline_blank,
+                      color: Colors.black,),
+                    onPressed: () {
+                      passwordDialog(context);
+                    },
+                  )
+                ],),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),

@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:provider/provider.dart';
+import 'package:schedule_project/constants/color.dart';
 
 class KeyboardKey extends StatefulWidget {
   final Object label;
@@ -20,34 +23,45 @@ class KeyboardKey extends StatefulWidget {
 }
 
 class _KeyboardKeyState extends State<KeyboardKey> {
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        widget.onTap(widget.value);
+        widget.onTap(widget.value.toString());
       },
-      child: Container(
-        child: AspectRatio(aspectRatio: 2,
-            child: Container(
-              child: Center(
-                child: widget.label == 'backspace' ?
-                Icon(Icons.keyboard_backspace) :
-                Text(
-                  widget.label.toString(),
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            )
-        )
+      child: Column(
+        children: [
+          Container(
+              //decoration: BoxDecoration(border: Border.all(color: THEME_COLOR)),
+              child: AspectRatio(aspectRatio: 2,
+                  child: Container(
+                    child: Center(
+                      child: widget.label == 'backspace' ?
+                      Icon(Icons.keyboard_backspace) :
+                      Text(
+                        widget.label.toString(),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  )
+              )
+          ),
+        ]
       ),
     );
   }
 }
 
+
+
 Future<void> passwordDialog(BuildContext context) {
+  var pw = "";
+  var pwMark = "----";
+
   final keys = [
     ['1', '2', '3'],
     ['4', '5', '6'],
@@ -63,7 +77,13 @@ Future<void> passwordDialog(BuildContext context) {
           return Expanded(
             child: KeyboardKey(
               label: y,
-              onTap: (val) {},
+              onTap: (val) {
+                if(pw != "" &&  val == "backspace"){
+                  pw = pw.substring(0, pw.length - 1);
+                }else if(val != "backspace"){
+                  pw += val;
+                }
+              },
               value: y,
             ),
           );
@@ -74,19 +94,43 @@ Future<void> passwordDialog(BuildContext context) {
 
   return showDialog<void>(
     context: context,
-    barrierDismissible: false, // 바깥 여백 터치시 대화 상자를 닫을 수 있는지 여부
+    barrierDismissible: true, // 바깥 여백 터치시 대화 상자를 닫을 수 있는지 여부
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: EdgeInsets.zero,
-        content: Stack(
+        content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-               child:
-                Column(children: [
-                  ...renderKeyboard(),
-                ],),
+            Stack(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                    child:
+                    Column(children: [
+                      SizedBox(height: 30),
+                      Text("패스워드를 입력해주세요", style: TextStyle(
+                          fontSize: 15,
+                          letterSpacing: 5
+                      )),
+                      SizedBox(height: 30),
+                      Container(
+                        child: Text(pwMark // ValueNotifier를 사용해서 변경여부 확인이 필요
+                            , style: TextStyle(
+                              fontSize: 50,
+                              letterSpacing: 30
+                            )),
+                      ),
+                      SizedBox(height: 30),
+                      ...renderKeyboard(),
+                      SizedBox(height: 50)
+                    ],),
+                  ),]
+                ),
+              ],
             ),
-          ],
+          ]
         ),
       );
     },

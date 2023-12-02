@@ -77,20 +77,16 @@ Future<void> passwordDialog(BuildContext context) {
               label: y,
               onTap: (val) {
                 setState((){
+                  pwMark = ['','','',''];
+
                   if(pw != "" &&  val == "backspace"){
                     pw = pw.substring(0, pw.length - 1);
                   }else if(val != "backspace"){
                     pw += val;
                   }
 
-                  pwMark = ['','','',''];
-
                   for(var i = 0; i < 4; i++){
-                    if(pw.length <= i ){
-                      pwMark[i] = "-";
-                    }else{
-                      pwMark[i] = "*";
-                    }
+                    pwMark[i] = pw.length <= i ? "-" : "*";
                   }
 
                   if(pw.length == 4) {

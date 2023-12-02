@@ -56,11 +56,9 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   }
 }
 
-
-
 Future<void> passwordDialog(BuildContext context) {
   var pw = "";
-  var pwMark = "----";
+  var pwMark = ['-','-','-','-'];
 
   final keys = [
     ['1', '2', '3'],
@@ -69,7 +67,7 @@ Future<void> passwordDialog(BuildContext context) {
     ['', '0', 'backspace'],
   ];
 
-  renderKeyboard() {
+  renderKeyboard(StateSetter setState) {
     return keys
         .map(
           (x) => Row(
@@ -78,11 +76,27 @@ Future<void> passwordDialog(BuildContext context) {
             child: KeyboardKey(
               label: y,
               onTap: (val) {
-                if(pw != "" &&  val == "backspace"){
-                  pw = pw.substring(0, pw.length - 1);
-                }else if(val != "backspace"){
-                  pw += val;
-                }
+                setState((){
+                  if(pw != "" &&  val == "backspace"){
+                    pw = pw.substring(0, pw.length - 1);
+                  }else if(val != "backspace"){
+                    pw += val;
+                  }
+
+                  pwMark = ['','','',''];
+
+                  for(var i = 0; i < 4; i++){
+                    if(pw.length <= i ){
+                      pwMark[i] = "-";
+                    }else{
+                      pwMark[i] = "*";
+                    }
+                  }
+
+                  if(pw.length == 4) {
+                    // 저장을 수행한다.
+                  }
+                });
               },
               value: y,
             ),
@@ -98,40 +112,51 @@ Future<void> passwordDialog(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: EdgeInsets.zero,
-        content: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                    child:
-                    Column(children: [
-                      SizedBox(height: 30),
-                      Text("패스워드를 입력해주세요", style: TextStyle(
-                          fontSize: 15,
-                          letterSpacing: 5
-                      )),
-                      SizedBox(height: 30),
-                      Container(
-                        child: Text(pwMark // ValueNotifier를 사용해서 변경여부 확인이 필요
-                            , style: TextStyle(
-                              fontSize: 50,
-                              letterSpacing: 30
-                            )),
+        content: StatefulBuilder(
+          builder: (__, StateSetter setState){
+            return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Row(
+                          children: [
+                            Expanded(
+                              child:
+                              Column(children: [
+                                SizedBox(height: 20),
+                                Text("암호를 입력해주세요", style: TextStyle(
+                                    fontSize: 15,
+                                    letterSpacing: 5
+                                )),
+                                SizedBox(height: 20),
+                                Container(
+                                  height: 7,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xfff3f3f3),
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Container(
+                                  child: Text(pwMark.join("") // ValueNotifier를 사용해서 변경여부 확인이 필요
+                                      , style: TextStyle(
+                                          fontSize: 50,
+                                          letterSpacing: 30
+                                      )),
+                                ),
+                                SizedBox(height: 15),
+                                ...renderKeyboard(setState),
+                                SizedBox(height: 30)
+                              ],),
+                            ),]
                       ),
-                      SizedBox(height: 30),
-                      ...renderKeyboard(),
-                      SizedBox(height: 50)
-                    ],),
-                  ),]
-                ),
-              ],
-            ),
-          ]
-        ),
+                    ],
+                  ),
+                ]
+            );
+          }
+        )
       );
     },
   );

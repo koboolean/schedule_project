@@ -163,13 +163,13 @@ class _MyPageState extends State<MyPage> {
                       oAuthList.degree2Yn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
                       color: Colors.black),
                     onPressed: () async {
-                      oAuthList.degree2Yn ? await passwordDialog(context, deleteDegree2Password, (returnVal){
+                      oAuthList.degree2Yn ? await passwordDialog(context, "d", deleteDegree2Password, (returnVal){
                         if(returnVal){
                           setState(() {
                             oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;
                           });
                         }
-                      }) : await passwordDialog(context, saveDegree2Password, (returnVal){
+                      }) : await passwordDialog(context, "i", saveDegree2Password, (returnVal){
                         if(returnVal){
                           setState(() {
                             oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;

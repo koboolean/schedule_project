@@ -53,7 +53,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   }
 }
 
-Future<void> passwordDialog(BuildContext context, Function callbackDegree2Password, Function returnValueCallback) {
+Future<void> passwordDialog(BuildContext context, String type, Function callbackDegree2Password, Function returnValueCallback) {
   var pw = "";
   var pwMark = ['-','-','-','-'];
   var maxLengthYn = false;
@@ -124,10 +124,11 @@ Future<void> passwordDialog(BuildContext context, Function callbackDegree2Passwo
                               child:
                               Column(children: [
                                 SizedBox(height: 20),
-                                Text(headerViewYn ? "암호를 입력해주세요" : "비밀번호가 일치하지 않습니다.", style: TextStyle(
-                                    fontSize: 15,
-                                    letterSpacing : headerViewYn ? 5 : 3,
-                                    color: headerViewYn ? Colors.black : Colors.red
+                                Text(headerViewYn ? type == "d" ? "등록된 2차암호를 입력해주세요" : "등록할 2차암호를 입력해주세요" : "비밀번호가 일치하지 않습니다.",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      letterSpacing : 3,
+                                      color: headerViewYn ? Colors.black : Colors.red
                                 )),
                                 SizedBox(height: 20),
                                 Container(
@@ -156,7 +157,7 @@ Future<void> passwordDialog(BuildContext context, Function callbackDegree2Passwo
                                     });
 
                                   }
-                                }, child: Text("확인")
+                                }, child: Text("확인", style : TextStyle(color: Colors.white))
                                 , style: ButtonStyle(backgroundColor: MaterialStateProperty.all(THEME_COLOR)),) : SizedBox(height: 50),
                                   SizedBox(height: 20),
 

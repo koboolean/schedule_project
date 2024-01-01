@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
-import 'package:provider/provider.dart';
 import 'package:schedule_project/constants/color.dart';
 
 class KeyboardKey extends StatefulWidget {
@@ -23,6 +19,7 @@ class KeyboardKey extends StatefulWidget {
 }
 
 class _KeyboardKeyState extends State<KeyboardKey> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +53,10 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   }
 }
 
-Future<void> passwordDialog(BuildContext context) {
+Future<void> passwordDialog(BuildContext context, Function callbackDegree2Password, Function returnValueCallback) {
   var pw = "";
   var pwMark = ['-','-','-','-'];
+  var maxLengthYn = false;
 
   final keys = [
     ['1', '2', '3'],
@@ -90,7 +88,9 @@ Future<void> passwordDialog(BuildContext context) {
                   }
 
                   if(pw.length == 4) {
-                    // 저장을 수행한다.
+                    maxLengthYn = true;
+                  }else{
+                    maxLengthYn = false;
                   }
                 });
               },
@@ -106,6 +106,8 @@ Future<void> passwordDialog(BuildContext context) {
     context: context,
     barrierDismissible: true, // 바깥 여백 터치시 대화 상자를 닫을 수 있는지 여부
     builder: (BuildContext context) {
+      var headerViewYn = true;
+
       return AlertDialog(
         contentPadding: EdgeInsets.zero,
         content: StatefulBuilder(
@@ -122,9 +124,10 @@ Future<void> passwordDialog(BuildContext context) {
                               child:
                               Column(children: [
                                 SizedBox(height: 20),
-                                Text("암호를 입력해주세요", style: TextStyle(
+                                Text(headerViewYn ? "암호를 입력해주세요" : "비밀번호가 일치하지 않습니다.", style: TextStyle(
                                     fontSize: 15,
-                                    letterSpacing: 5
+                                    letterSpacing : headerViewYn ? 5 : 3,
+                                    color: headerViewYn ? Colors.black : Colors.red
                                 )),
                                 SizedBox(height: 20),
                                 Container(
@@ -141,9 +144,22 @@ Future<void> passwordDialog(BuildContext context) {
                                           letterSpacing: 30
                                       )),
                                 ),
-                                SizedBox(height: 15),
+                                SizedBox(height: 20),
                                 ...renderKeyboard(setState),
-                                SizedBox(height: 30)
+                                maxLengthYn == true ? ElevatedButton(onPressed: () async {
+                                  if(await callbackDegree2Password(pw.toString())){
+                                    returnValueCallback(true);
+                                    Navigator.pop(context);
+                                  }else{
+                                    setState((){
+                                      headerViewYn = false;
+                                    });
+
+                                  }
+                                }, child: Text("확인")
+                                , style: ButtonStyle(backgroundColor: MaterialStateProperty.all(THEME_COLOR)),) : SizedBox(height: 50),
+                                  SizedBox(height: 20),
+
                               ],),
                             ),]
                       ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:schedule_project/screens/calendarPage.dart';
@@ -32,6 +33,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = context.read<AuthService>();
+    authService.setUserData();
+
     return Scaffold(
       extendBody: true,
       body: _childrenWidget[_currentIndex],
@@ -43,7 +48,7 @@ class _HomePageState extends State<HomePage> {
           onTap: _onTap,
           currentIndex: _currentIndex,
           selectedItemColor: THEME_COLOR,
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.date_range),
               activeIcon: Icon(Icons.date_range, color: THEME_COLOR),

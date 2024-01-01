@@ -1,12 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:schedule_project/provider/OAuth.dart';
+import 'package:yaml/yaml.dart';
 
 class AuthService extends ChangeNotifier {
+
+  final degree2Pw = FirebaseFirestore.instance.collection('degree2Pw');
+
+  List<OAuth> oAuthList = [];
+
+  /**
+   * 사용자 정보 가져오기
+   */
   User? currentUser() {
     // 현재 유저(로그인 되지 않은 경우 null 반환)
-    return FirebaseAuth.instance.currentUser;
+    var currentUser = FirebaseAuth.instance.currentUser;
+
+    return currentUser;
   }
 
+  /**
+   * 회원가입 기능
+   */
   void signUp({
     required String email, // 이메일
     required String password, // 비밀번호
@@ -41,6 +59,9 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  /**
+   * 로그인 기능
+   */
   void signIn({
     required String email, // 이메일
     required String password, // 비밀번호
@@ -78,17 +99,93 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  /**
+   * 로그아웃
+   */
   void signOut() async {
-    // 로그아웃
     await FirebaseAuth.instance.signOut();
     notifyListeners(); // 로그인 상태 변경 알림
   }
 
+  /**
+   * 탈퇴하기
+   */
   void delete() async {
-    // 탈퇴하기
-
     await currentUser()?.delete();
 
     notifyListeners(); // 로그인 상태 변경 알림
   }
+
+  /**
+   * 2차 비밀번호 설정하기
+   */
+  void saveDegree2Password(String pw) async{
+    var uuid = currentUser()?.uid; // 유저의 uid값 가져오기
+
+    degree2Pw.doc(uuid).set(Map.of({"uuid" : uuid, "pw" : pw}));
+
+    setUserData();
+  }
+
+  /**
+   * 2차 비밀번호 삭제
+   */
+  Future<bool> deleteDegree2Password(String pw) async{
+    var uuid = currentUser()?.uid;
+
+    final map = await degree2Pw.where("uuid",isEqualTo: uuid).where("pw", isEqualTo: pw).get();
+    List data = map.docs.map((doc) => doc.data()).toList();
+
+    if(data.isNotEmpty){
+      degree2Pw.doc(uuid).delete();
+      setUserData();
+      return true;
+    }else{
+      setUserData();
+      return false;
+    }
+  }
+
+  /**
+   * 2차비밀번호 저장여부 확인하기
+   */
+  Future<bool> ceckDegree2Password() async{
+    var uuid = currentUser()?.uid; // 유저의 uid값 가져오기
+
+    final map = await degree2Pw.where("uuid", isEqualTo : uuid).get();
+    var list = map.docs.map((doc) => doc.data()).toList();
+
+    return list.isEmpty;
+  }
+
+ /**
+  * 사용자 기초데이터를 조회한다.
+  */
+  void setUserData() async{
+    var currentUser = FirebaseAuth.instance.currentUser;
+    var uid = currentUser!.uid.toString();
+
+    String version = "";
+
+    rootBundle.loadString("pubspec.yaml").then((yamlValue) {
+      var yaml = loadYaml(yamlValue);
+      version = yaml['version'].toString().split("+")[0];
+    });
+
+    final map = await degree2Pw.where("uuid", isEqualTo : uid).get();
+    var list = map.docs.map((doc) => doc.data()).toList();
+
+
+    if(oAuthList.isEmpty){
+      oAuthList.add(OAuth(version ?? "1.0", list.isNotEmpty));
+    }else{
+      oAuthList[0].version = version ?? "1.0";
+      oAuthList[0].degree2Yn = list.isNotEmpty;
+    }
+
+
+    notifyListeners(); // provider 갱신
+  }
+
+
 }

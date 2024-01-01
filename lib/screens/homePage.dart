@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:schedule_project/screens/calendarPage.dart';
+import 'package:schedule_project/screens/dDayPage.dart';
+import 'package:schedule_project/screens/diaryPage.dart';
 import 'package:schedule_project/screens/myPage.dart';
 
 import '../constants/color.dart';
@@ -20,8 +22,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _childrenWidget = [
     CalendarPage(), // 캘린더
-    MyPage(), // 일기장
-    MyPage(), // D-Day
+    DiaryPage(), // 일기장
+    DDayPage(), // D-Day
     MyPage() // 마이페이지
   ];
 

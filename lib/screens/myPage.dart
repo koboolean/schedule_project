@@ -1,13 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:yaml/yaml.dart';
+import 'dart:developer';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import 'package:schedule_project/widgets/passwordDialog.dart';
+
+
+import '../provider/OAuth.dart';
 import '../services/authService.dart';
 import '../widgets/showConfirmationDialog.dart';
 import 'loginPage.dart';
 
-/// 홈페이지
+/// 마이페이지
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
 
@@ -18,17 +23,34 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   TextEditingController jobController = TextEditingController();
 
+  Future<bool> saveDegree2Password(String pw) async {
+    var service = AuthService();
+
+    if(await service.ceckDegree2Password()){
+      service.saveDegree2Password(pw);
+    }
+
+    return true;
+  }
+
+  Future<bool> deleteDegree2Password(String pw) async{
+    var service = AuthService();
+
+    var returnValue = service.deleteDegree2Password(pw);
+
+    return returnValue;
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final authService = context.read<AuthService>();
     final user = authService.currentUser()!;
-    final ValueNotifier<String> version =
-    ValueNotifier<String>("1.0"); // ValueNotifier 변수 선언
+    var oAuthList = authService.oAuthList[0];
 
-    rootBundle.loadString("pubspec.yaml").then((yamlValue) {
-      var yaml = loadYaml(yamlValue);
-      version.value = yaml['version'].toString().split("+")[0];
-    });
+    final ValueNotifier<String> version = ValueNotifier<String>("1.0"); // ValueNotifier 변수 선언
+    version.value = oAuthList.version;
 
     return Consumer(
       builder: (context, bucketService, child) {
@@ -65,7 +87,6 @@ class _MyPageState extends State<MyPage> {
                         )),
                   ),
                   SizedBox(height: 15),
-                  Text('${user.displayName}'),
                   Text(
                     '${user.email}',
                     style: TextStyle(
@@ -103,7 +124,7 @@ class _MyPageState extends State<MyPage> {
                 height: 23,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 30.0),
+                padding: const EdgeInsets.only(left: 18.0, right: 30.0, bottom: 10),
                 child: Row(
                   children: [
                     Text(
@@ -131,6 +152,33 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ],
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                child: Row(children: [
+                  Text("암호설정 여부", style : TextStyle(fontSize: 16)),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      oAuthList.degree2Yn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                      color: Colors.black),
+                    onPressed: () async {
+                      oAuthList.degree2Yn ? await passwordDialog(context, "d", deleteDegree2Password, (returnVal){
+                        if(returnVal){
+                          setState(() {
+                            oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;
+                          });
+                        }
+                      }) : await passwordDialog(context, "i", saveDegree2Password, (returnVal){
+                        if(returnVal){
+                          setState(() {
+                            oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;
+                          });
+                        }
+                      });
+                    },
+                  )
+                ],),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),

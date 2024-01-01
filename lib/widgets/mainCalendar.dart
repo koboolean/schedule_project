@@ -134,6 +134,7 @@ class _MainCalendarState extends State<MainCalendar> {
             }
           }
       ),
+
       calendarStyle: CalendarStyle(
         cellMargin: const EdgeInsets.only(left: 10.0, right: 10.0),
         cellPadding: const EdgeInsets.only(left: 10.0, right: 10.0),

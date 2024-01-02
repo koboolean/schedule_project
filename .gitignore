@@ -14,8 +14,9 @@ coverage/
 linux/flutter/**
 windows/flutter/**
 android/.idea/**
-.idea/**
 pubspec.lock
+
+.idea/**
 
 lib/generated_plugin_registrant.dart
 # For library packages, don’t commit the pubspec.lock file.

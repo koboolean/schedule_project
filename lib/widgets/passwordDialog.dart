@@ -35,10 +35,10 @@ class _KeyboardKeyState extends State<KeyboardKey> {
                   child: Container(
                     child: Center(
                       child: widget.label == 'backspace' ?
-                      Icon(Icons.keyboard_backspace) :
+                      const Icon(Icons.keyboard_backspace) :
                       Text(
                         widget.label.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold
                         ),
@@ -123,29 +123,29 @@ Future<void> passwordDialog(BuildContext context, String type, Function callback
                             Expanded(
                               child:
                               Column(children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(headerViewYn ? type == "d" ? "등록된 2차암호를 입력해주세요" : "등록할 2차암호를 입력해주세요" : "비밀번호가 일치하지 않습니다.",
                                     style: TextStyle(
                                       fontSize: 15,
                                       letterSpacing : 3,
                                       color: headerViewYn ? Colors.black : Colors.red
                                 )),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Container(
                                   height: 7,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Container(
                                   child: Text(pwMark.join("") // ValueNotifier를 사용해서 변경여부 확인이 필요
-                                      , style: TextStyle(
+                                      , style: const TextStyle(
                                           fontSize: 50,
                                           letterSpacing: 30
                                       )),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 ...renderKeyboard(setState),
                                 maxLengthYn == true ? ElevatedButton(onPressed: () async {
                                   if(await callbackDegree2Password(pw.toString())){
@@ -157,9 +157,9 @@ Future<void> passwordDialog(BuildContext context, String type, Function callback
                                     });
 
                                   }
-                                }, child: Text("확인", style : TextStyle(color: Colors.white))
-                                , style: ButtonStyle(backgroundColor: MaterialStateProperty.all(THEME_COLOR)),) : SizedBox(height: 50),
-                                  SizedBox(height: 20),
+                                }, child: const Text("확인", style : TextStyle(color: Colors.white))
+                                , style: ButtonStyle(backgroundColor: MaterialStateProperty.all(THEME_COLOR)),) : const SizedBox(height: 50),
+                                  const SizedBox(height: 20),
 
                               ],),
                             ),]

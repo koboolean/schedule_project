@@ -12,9 +12,7 @@ class AuthService extends ChangeNotifier {
 
   List<OAuth> oAuthList = [];
 
-  /**
-   * 사용자 정보 가져오기
-   */
+  /// 사용자 정보 가져오기
   User? currentUser() {
     // 현재 유저(로그인 되지 않은 경우 null 반환)
     var currentUser = FirebaseAuth.instance.currentUser;
@@ -22,9 +20,7 @@ class AuthService extends ChangeNotifier {
     return currentUser;
   }
 
-  /**
-   * 회원가입 기능
-   */
+  /// 회원가입 기능
   void signUp({
     required String email, // 이메일
     required String password, // 비밀번호
@@ -59,9 +55,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  /**
-   * 로그인 기능
-   */
+  /// 로그인 기능
   void signIn({
     required String email, // 이메일
     required String password, // 비밀번호
@@ -99,26 +93,20 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  /**
-   * 로그아웃
-   */
+  /// 로그아웃
   void signOut() async {
     await FirebaseAuth.instance.signOut();
     notifyListeners(); // 로그인 상태 변경 알림
   }
 
-  /**
-   * 탈퇴하기
-   */
+  /// 탈퇴하기
   void delete() async {
     await currentUser()?.delete();
 
     notifyListeners(); // 로그인 상태 변경 알림
   }
 
-  /**
-   * 2차 비밀번호 설정하기
-   */
+  /// 2차 비밀번호 설정하기
   void saveDegree2Password(String pw) async{
     var uuid = currentUser()?.uid; // 유저의 uid값 가져오기
 
@@ -127,9 +115,7 @@ class AuthService extends ChangeNotifier {
     setUserData();
   }
 
-  /**
-   * 2차 비밀번호 삭제
-   */
+  /// 2차 비밀번호 삭제
   Future<bool> deleteDegree2Password(String pw) async{
     var uuid = currentUser()?.uid;
 
@@ -146,9 +132,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  /**
-   * 2차비밀번호 저장여부 확인하기
-   */
+  /// 2차비밀번호 저장여부 확인하기
   Future<bool> ceckDegree2Password() async{
     var uuid = currentUser()?.uid; // 유저의 uid값 가져오기
 
@@ -158,9 +142,7 @@ class AuthService extends ChangeNotifier {
     return list.isEmpty;
   }
 
- /**
-  * 사용자 기초데이터를 조회한다.
-  */
+ /// 사용자 기초데이터를 조회한다.
   void setUserData() async{
     var currentUser = FirebaseAuth.instance.currentUser;
     var uid = currentUser!.uid.toString();

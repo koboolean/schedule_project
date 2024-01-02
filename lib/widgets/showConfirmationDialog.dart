@@ -10,13 +10,13 @@ Future<bool?> showConfirmationDialog(
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text("취소"),
+            child: const Text("취소"),
             onPressed: () {
               Navigator.pop(context, false); // 취소 버튼 클릭시 false 반환
             },
           ),
           TextButton(
-            child: Text("확인"),
+            child: const Text("확인"),
             onPressed: () {
               Navigator.pop(context, true); // 확인 버튼 클릭시 true 반환
             },

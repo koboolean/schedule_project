@@ -1,16 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:schedule_project/widgets/mainCalendar.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:yaml/yaml.dart';
-
-import '../services/authService.dart';
-import '../widgets/showConfirmationDialog.dart';
-import 'loginPage.dart';
 
 /// 홈페이지
 class DDayPage extends StatefulWidget {
@@ -32,7 +20,7 @@ class _DDayPageState extends State<DDayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar : AppBar(), //어플 상단 바
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             // SizedBox(height: 30), // 빈박스를 만들어서 header 위쪽 공간을 확보

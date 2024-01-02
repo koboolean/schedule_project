@@ -1,13 +1,8 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:schedule_project/widgets/passwordDialog.dart';
 
-
-import '../provider/OAuth.dart';
 import '../services/authService.dart';
 import '../widgets/showConfirmationDialog.dart';
 import 'loginPage.dart';
@@ -59,11 +54,11 @@ class _MyPageState extends State<MyPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 18.0),
                 child: Text(
                   "마이페이지",
                   style: TextStyle(
@@ -72,7 +67,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 31,
               ),
               Column(
@@ -80,36 +75,36 @@ class _MyPageState extends State<MyPage> {
                   Center(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Icon(
+                        child: const Icon(
                           Icons.account_circle,
                           size: 158,
                           color: Colors.grey,
                         )),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Text(
                     '${user.email}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Color.fromRGBO(128, 128, 128, 1),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 26,
               ),
               Container(
                 height: 7,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color(0xfff3f3f3),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 18.0),
                 child: Column(
                   children: [
                     Text(
@@ -120,21 +115,21 @@ class _MyPageState extends State<MyPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 23,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 30.0, bottom: 10),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       "앱 버전",
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
-                    Spacer(),
-                    SizedBox(width: 200),
+                    const Spacer(),
+                    const SizedBox(width: 200),
                     ValueListenableBuilder(
                       valueListenable: version,
                       builder:
@@ -143,7 +138,7 @@ class _MyPageState extends State<MyPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text(version.value,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                 )),
                           ],
@@ -156,8 +151,8 @@ class _MyPageState extends State<MyPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Row(children: [
-                  Text("암호설정 여부", style : TextStyle(fontSize: 16)),
-                  Spacer(),
+                  const Text("암호설정 여부", style : TextStyle(fontSize: 16)),
+                  const Spacer(),
                   IconButton(
                     icon: Icon(
                       oAuthList.degree2Yn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
@@ -184,15 +179,15 @@ class _MyPageState extends State<MyPage> {
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       "로그아웃",
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.black,
                       ),
@@ -203,7 +198,7 @@ class _MyPageState extends State<MyPage> {
                         // 로그인 페이지로 이동
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       },
                     ),
@@ -214,15 +209,15 @@ class _MyPageState extends State<MyPage> {
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       "탈퇴하기",
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.black,
                       ),
@@ -241,7 +236,7 @@ class _MyPageState extends State<MyPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                                builder: (context) => const LoginPage()),
                           );
                         }
                       },

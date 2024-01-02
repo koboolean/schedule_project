@@ -1,16 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:schedule_project/widgets/mainCalendar.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:yaml/yaml.dart';
-
-import '../services/authService.dart';
-import '../widgets/showConfirmationDialog.dart';
-import 'loginPage.dart';
 
 /// 홈페이지
 class CalendarPage extends StatefulWidget {

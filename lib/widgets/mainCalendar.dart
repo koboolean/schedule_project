@@ -13,7 +13,8 @@ class _MainCalendarState extends State<MainCalendar> {
   //late final ValueNotifier<List<Event>> _selectedEvents;
 
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay; //Future 타입, 지금은 없지만 미래에 요청한 데이터 혹은 에러가 담길 그릇
+  DateTime? _selectedDay = DateTime.now();
+  //Future 타입, 지금은 없지만 미래에 요청한 데이터 혹은 에러가 담길 그릇
 
   /*@override
   void initState() {
@@ -136,11 +137,14 @@ class _MainCalendarState extends State<MainCalendar> {
       ),
 
       calendarStyle: CalendarStyle(
-        cellMargin: const EdgeInsets.only(left: 10.0, right: 10.0),
-        cellPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        cellMargin: const EdgeInsets.only(left: 7.0, right: 7.0),
+        cellPadding: const EdgeInsets.only(left: 7.0, right: 7.0),
         //캘린더 전체를 선으로 구분
         tableBorder: TableBorder.all(color: Colors.black12),
-
+        selectedTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 15,
+        ),
         /*
         weekendTextStyle: TextStyle(
           color: DateFormat.E().toString() == "Sun" ? Colors.red : Colors.blue,

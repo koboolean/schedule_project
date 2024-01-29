@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:schedule_project/widgets/passwordDialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/authService.dart';
+import '../services/localAuth.dart';
 import '../widgets/showConfirmationDialog.dart';
 import 'loginPage.dart';
 
@@ -36,6 +40,7 @@ class _MyPageState extends State<MyPage> {
     return returnValue;
 
   }
+
 
 
   @override
@@ -151,7 +156,7 @@ class _MyPageState extends State<MyPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Row(children: [
-                  const Text("암호설정 여부", style : TextStyle(fontSize: 16)),
+                  const Text("암호설정", style : TextStyle(fontSize: 16)),
                   const Spacer(),
                   IconButton(
                     icon: Icon(
@@ -163,6 +168,7 @@ class _MyPageState extends State<MyPage> {
                           setState(() {
                             oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;
                           });
+                          LocalAuthApi().setLcalAuthSetYn(false);
                         }
                       }) : await passwordDialog(context, "i", saveDegree2Password, (returnVal){
                         if(returnVal){
@@ -175,6 +181,34 @@ class _MyPageState extends State<MyPage> {
                   )
                 ],),
               ),
+              (oAuthList.degree2Yn && LocalAuthApi.localAuthYn(context) == true) ? Padding(
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                  child: Row(
+                    children: [
+                      const Text("생체인증 사용하기",
+                        style: TextStyle(
+                             fontSize: 16,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: Icon(
+                            LocalAuthApi.isLcalAuthSetYn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                            color: Colors.black),
+                        onPressed: () async {
+                          var isCeck = await LocalAuthApi.authenticate();
+
+                          if(isCeck){
+                            setState(() {
+                              LocalAuthApi().setLcalAuthSetYn(!LocalAuthApi.isLcalAuthSetYn);
+                            });
+
+                          }
+                        },
+                      )
+                    ],
+                  ),
+              ) : Row(),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Row(
@@ -191,15 +225,23 @@ class _MyPageState extends State<MyPage> {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         // 로그아웃
-                        context.read<AuthService>().signOut();
-
-                        // 로그인 페이지로 이동
-                        Navigator.pushReplacement(
+                        bool? result = await showConfirmationDialog(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                          '로그아웃',
+                          '로그아웃하시겠습니까?',
                         );
+
+                        if(result == true){
+                          context.read<AuthService>().signOut();
+
+                          // 로그인 페이지로 이동
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LoginPage()),
+                          );
+                        }
                       },
                     ),
                   ],
@@ -224,7 +266,7 @@ class _MyPageState extends State<MyPage> {
                       onPressed: () async {
                         bool? result = await showConfirmationDialog(
                           context,
-                          'Confirmation',
+                          '계정탈퇴',
                           '정말 탈퇴하시겠습니까?',
                         );
 

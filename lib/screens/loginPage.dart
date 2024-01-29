@@ -23,12 +23,13 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, authService, child) {
         final user = authService.currentUser();
         return Scaffold(
-          appBar: AppBar(title: const Text("로그인")),
+          //appBar: AppBar(title: const Text("로그인")),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(height: 25,),
                 /// 현재 유저 로그인 상태
                 Center(
                   child: Text(

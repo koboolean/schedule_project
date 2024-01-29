@@ -4,9 +4,11 @@ import 'package:schedule_project/screens/calendarPage.dart';
 import 'package:schedule_project/screens/dDayPage.dart';
 import 'package:schedule_project/screens/diaryPage.dart';
 import 'package:schedule_project/screens/myPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/color.dart';
 import '../services/authService.dart';
+import '../services/localAuth.dart';
 
 /// 홈페이지
 class HomePage extends StatefulWidget {
@@ -26,7 +28,10 @@ class _HomePageState extends State<HomePage> {
     MyPage() // 마이페이지
   ];
 
-  void _onTap(int index) {
+  void _onTap(int index) async {
+
+    LocalAuthApi().getLcalAuthSetYn();
+
     setState(() {
       _currentIndex = index;
     });

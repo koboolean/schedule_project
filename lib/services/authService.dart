@@ -8,7 +8,7 @@ import 'package:yaml/yaml.dart';
 
 class AuthService extends ChangeNotifier {
 
-  final degree2Pw = FirebaseFirestore.instance.collection('degree2Pw');
+  final degree2Pw = FirebaseFirestore.instance.collection('DEGREE_2PW');
 
   List<OAuth> oAuthList = [];
 

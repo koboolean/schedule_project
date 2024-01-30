@@ -131,10 +131,12 @@ class _PasswordPageState extends State<PasswordPage> {
                 if(pw.length == 4) {
                   maxLengthYn = true;
                   if(password[0].length == 0){
+                    setState(()=>{
+                        pwMark = ['-','-','-','-'],
+                        message = "확인을위해 다시한번 입력해주세요."
+                    });
                     password[0] = pw;
                     pw = "";
-                    pwMark = ['-','-','-','-'];
-
                     if(degree2Yn == "r"){
                       // 2차암호가 read 형식일 경우
 

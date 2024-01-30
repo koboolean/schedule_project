@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:schedule_project/screens/passwordPage.dart';
 import 'package:schedule_project/widgets/passwordDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,27 +22,6 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   TextEditingController jobController = TextEditingController();
-
-  Future<bool> saveDegree2Password(String pw) async {
-    var service = AuthService();
-
-    if(await service.ceckDegree2Password()){
-      service.saveDegree2Password(pw);
-    }
-
-    return true;
-  }
-
-  Future<bool> deleteDegree2Password(String pw) async{
-    var service = AuthService();
-
-    var returnValue = service.deleteDegree2Password(pw);
-
-    return returnValue;
-
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +143,7 @@ class _MyPageState extends State<MyPage> {
                       oAuthList.degree2Yn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
                       color: Colors.black),
                     onPressed: () async {
+                      /* 팝업형식에서 화면형식으로 변경
                       oAuthList.degree2Yn ? await passwordDialog(context, "d", deleteDegree2Password, (returnVal){
                         if(returnVal){
                           setState(() {
@@ -177,37 +158,50 @@ class _MyPageState extends State<MyPage> {
                           });
                         }
                       });
+                       */
+                      String degree2Yn = oAuthList.degree2Yn ? "d" : "i";
+
+                      var isYn = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PasswordPage(degree2Yn : degree2Yn)),
+                      );
+
+                      if(isYn == true){
+                        setState(() {
+                          oAuthList.degree2Yn = !authService.oAuthList[0].degree2Yn;
+                        });
+                      }
                     },
                   )
                 ],),
               ),
               (oAuthList.degree2Yn && LocalAuthApi.localAuthYn(context) == true) ? Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-                  child: Row(
-                    children: [
-                      const Text("생체인증 사용하기",
-                        style: TextStyle(
-                             fontSize: 16,
-                        ),
+                child: Row(
+                  children: [
+                    const Text("생체인증 사용하기",
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
-                      const Spacer(),
-                      IconButton(
-                        icon: Icon(
-                            LocalAuthApi.isLcalAuthSetYn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
-                            color: Colors.black),
-                        onPressed: () async {
-                          var isCeck = await LocalAuthApi.authenticate();
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                          LocalAuthApi.isLcalAuthSetYn ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                          color: Colors.black),
+                      onPressed: () async {
+                        var isCeck = await LocalAuthApi.authenticate();
 
-                          if(isCeck){
-                            setState(() {
-                              LocalAuthApi().setLcalAuthSetYn(!LocalAuthApi.isLcalAuthSetYn);
-                            });
+                        if(isCeck){
+                          setState(() {
+                            LocalAuthApi().setLcalAuthSetYn(!LocalAuthApi.isLcalAuthSetYn);
+                          });
 
-                          }
-                        },
-                      )
-                    ],
-                  ),
+                        }
+                      },
+                    )
+                  ],
+                ),
               ) : Row(),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),

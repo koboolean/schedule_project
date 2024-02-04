@@ -100,8 +100,18 @@ class AuthService extends ChangeNotifier {
   }
 
   /// 탈퇴하기
-  void delete() async {
-    await currentUser()?.delete();
+  void delete(password, onSuccess, onError) async {
+    var user = FirebaseAuth.instance.currentUser;
+    var authCredential = EmailAuthProvider.credential(email: user!.email.toString(), password: password);
+    try {
+      await user.reauthenticateWithCredential(authCredential);
+      await currentUser()?.delete();
+      onSuccess();
+    }catch(e){
+      // 에러 발생
+      onError(e.toString());
+    }
+
 
     notifyListeners(); // 로그인 상태 변경 알림
   }

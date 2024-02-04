@@ -266,14 +266,22 @@ class _MyPageState extends State<MyPage> {
 
                         if (result == true) {
                           // 탈퇴하기
-                          context.read<AuthService>().delete();
+                          context.read<AuthService>().delete('guswns123', (){
+                            // // 회원탈퇴 성공시
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginPage()),
+                            );
+                          }, (message){
+                            // 에러 발생시 수행
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(message),
+                            ));
+                            return false;
+                          });
 
-                          // // 로그인 페이지로 이동
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
-                          );
+
                         }
                       },
                     ),

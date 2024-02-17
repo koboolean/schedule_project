@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:schedule_project/screens/deleteUserPage.dart';
 import 'package:schedule_project/screens/passwordPage.dart';
 import 'package:schedule_project/widgets/passwordDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -258,31 +259,11 @@ class _MyPageState extends State<MyPage> {
                         color: Colors.black,
                       ),
                       onPressed: () async {
-                        bool? result = await showConfirmationDialog(
+                        Navigator.push(
                           context,
-                          '계정탈퇴',
-                          '정말 탈퇴하시겠습니까?',
+                          MaterialPageRoute(
+                              builder: (context) => const DeleteUserPage()),
                         );
-
-                        if (result == true) {
-                          // 탈퇴하기
-                          context.read<AuthService>().delete('guswns123', (){
-                            // // 회원탈퇴 성공시
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                            );
-                          }, (message){
-                            // 에러 발생시 수행
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(message),
-                            ));
-                            return false;
-                          });
-
-
-                        }
                       },
                     ),
                   ],
